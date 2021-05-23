@@ -2,7 +2,7 @@
 {
 	public class Product
 	{
-		public int Id { get; set; }
+		public string Id { get; set; }
 		public ProductSeries ProductSeries { get; set; }
 		public int SerialNumber { get; set; }
 		public int ConditionStatus { get; set; }

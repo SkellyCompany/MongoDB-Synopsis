@@ -7,12 +7,12 @@ namespace MongoDBSynopsis.Core.ApplicationService
 	{
 		Manufacturer Create(Manufacturer manufacturer);
 
-		Manufacturer Read(int id);
+		Manufacturer Read(string id);
 
 		IEnumerable<Manufacturer> ReadAll();
 
 		Manufacturer Update(Manufacturer manufacturer);
 
-		Manufacturer Delete(int id);
+		Manufacturer Delete(string id);
 	}
 }

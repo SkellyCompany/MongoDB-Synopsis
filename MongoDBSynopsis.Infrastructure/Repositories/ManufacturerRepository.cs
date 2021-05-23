@@ -1,4 +1,7 @@
-﻿using MongoDBSynopsis.Core.DomainService;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using MongoDBSynopsis.Core.DomainService;
 using MongoDBSynopsis.Entities;
 using System;
 using System.Collections.Generic;
@@ -7,33 +10,69 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 {
 	public class ManufacturerRepository : IManufacturerRepository
 	{
+		private readonly MongoClient _mongoClient;
+
+		public ManufacturerRepository(MongoClient mongoClient)
+		{
+			_mongoClient = mongoClient;
+		}
+
 		public Manufacturer Create(Manufacturer manufacturer)
 		{
-			throw new NotImplementedException();
+			IMongoDatabase _database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> _manufacturerCollection = _database.GetCollection<BsonDocument>("Manufacturers");
+			BsonDocument bsonDocument = new BsonDocument
+			{
+				{ "Name", manufacturer.Name},
+				{ "Image", manufacturer.Image}
+			};
+			_manufacturerCollection.InsertOne(bsonDocument);
+			return manufacturer;
 		}
 
-		public Manufacturer Delete(int id)
+		public Manufacturer Delete(string id)
 		{
-
-			throw new NotImplementedException();
+			IMongoDatabase _database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> _manufacturerCollection = _database.GetCollection<BsonDocument>("Manufacturers");
+			var documentFilter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+			_manufacturerCollection.DeleteOne(documentFilter);
+			return null;
 		}
 
-		public Manufacturer Read(int id)
+		public Manufacturer Read(string id)
 		{
-			throw new NotImplementedException();
+			IMongoDatabase _database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> _manufacturerCollection = _database.GetCollection<BsonDocument>("Manufacturers");
+			var documentFilter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+			BsonDocument document = _manufacturerCollection.Find(documentFilter).FirstOrDefault();
+			return BsonSerializer.Deserialize<Manufacturer>(document);
 		}
 
 		public IEnumerable<Manufacturer> ReadAll()
 		{
-			Client client = new Client();
-			var t = client.Test();
-			var ta = client.Test();
-			throw new NotImplementedException();
+			IMongoDatabase _database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument>  _manufacturerCollection = _database.GetCollection<BsonDocument>("Manufacturers");
+			IEnumerable<BsonDocument> documents = _manufacturerCollection.Find(new BsonDocument()).ToList();
+			List<Manufacturer> t = new List<Manufacturer>();
+			foreach (BsonDocument item in documents)
+			{
+				t.Add(BsonSerializer.Deserialize<Manufacturer>(item));
+			}
+			return t;
 		}
 
 		public Manufacturer Update(Manufacturer manufacturer)
 		{
-			throw new NotImplementedException();
+			IMongoDatabase _database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> _manufacturerCollection = _database.GetCollection<BsonDocument>("Manufacturers");
+			var documentFilter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(manufacturer.Id));
+			BsonDocument bsonDocument = new BsonDocument
+				{
+					{ "Name", manufacturer.Name},
+					{ "Image", manufacturer.Image}
+				};
+			_manufacturerCollection.ReplaceOne(documentFilter, bsonDocument);
+			return manufacturer;
 		}
 	}
 }

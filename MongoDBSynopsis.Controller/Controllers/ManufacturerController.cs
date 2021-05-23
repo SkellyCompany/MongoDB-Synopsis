@@ -30,12 +30,11 @@ namespace MongoDBSynopsis.Controller.Controllers
             {
                 return BadRequest(e.Message);
             }
-
         }
 
         // GET manufacturer/5
         [HttpGet("{id}")]
-        public ActionResult<Manufacturer> Get(int id)
+        public ActionResult<Manufacturer> Get(string id)
         {
             try
             {
@@ -60,20 +59,14 @@ namespace MongoDBSynopsis.Controller.Controllers
             {
                 return BadRequest(e.Message);
             }
-
-
         }
 
         // PUT manufacturer/5
         [HttpPut("{id}")]
-        public ActionResult<Manufacturer> Put(int id, [FromBody] Manufacturer value)
+        public ActionResult<Manufacturer> Put([FromBody] Manufacturer value)
         {
             try
             {
-                if (id != value.Id)
-                {
-                    return Conflict("Parameter ID does not match Manufacturer id");
-                }
                 return Ok(_manufacturerService.Update(value));
             }
             catch (Exception e)
@@ -84,7 +77,7 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         // DELETE manufacturer/5
         [HttpDelete("{id}")]
-        public ActionResult<Product> Delete(int id)
+        public ActionResult<Product> Delete(string id)
         {
             Manufacturer deletedManufacturer = _manufacturerService.Delete(id);
             if (deletedManufacturer == null)

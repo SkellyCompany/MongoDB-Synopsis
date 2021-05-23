@@ -66,7 +66,7 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         // PUT product/5
         [HttpPut("{id}")]
-        public ActionResult<Product> Put(int id, [FromBody] Product value)
+        public ActionResult<Product> Put(string id, [FromBody] Product value)
         {
             try
             {

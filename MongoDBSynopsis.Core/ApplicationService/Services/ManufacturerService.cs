@@ -19,7 +19,7 @@ namespace MongoDBSynopsis.Core.ApplicationService.Services
 			return _manufacturerRepository.ReadAll();
 		}
 
-		public Manufacturer Read(int id)
+		public Manufacturer Read(string id)
 		{
 			return _manufacturerRepository.Read(id);
 		}
@@ -34,7 +34,7 @@ namespace MongoDBSynopsis.Core.ApplicationService.Services
 			return _manufacturerRepository.Update(manufacturer);
 		}
 
-		public Manufacturer Delete(int id)
+		public Manufacturer Delete(string id)
 		{
 			return _manufacturerRepository.Delete(id);
 		}
