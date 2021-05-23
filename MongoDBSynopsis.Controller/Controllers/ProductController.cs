@@ -18,7 +18,7 @@ namespace MongoDBSynopsis.Controller.Controllers
             _productService = productService;
         }
 
-        // GET api/product
+        // GET product
         [HttpGet]
         public ActionResult<IEnumerable<Product>> Get()
         {
@@ -33,7 +33,7 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         }
 
-        // GET api/product/5
+        // GET product/5
         [HttpGet("{id}")]
         public ActionResult<Product> Get(int id)
         {
@@ -48,7 +48,7 @@ namespace MongoDBSynopsis.Controller.Controllers
         }
 
 
-        // POST api/product
+        // POST product
         [HttpPost]
         public ActionResult<Product> Post([FromBody] Product value)
         {
@@ -64,7 +64,7 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         }
 
-        // PUT api/product/5
+        // PUT product/5
         [HttpPut("{id}")]
         public ActionResult<Product> Put(int id, [FromBody] Product value)
         {
@@ -82,7 +82,7 @@ namespace MongoDBSynopsis.Controller.Controllers
             }
         }
 
-        // DELETE api/product/5
+        // DELETE product/5
         [HttpDelete("{id}")]
         public ActionResult<Product> Delete(int id)
         {

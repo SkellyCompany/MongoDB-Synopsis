@@ -1,10 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MongoDBSynopsis.Infrastructure
 {
@@ -12,26 +8,29 @@ namespace MongoDBSynopsis.Infrastructure
 	{
 		private IMongoDatabase _database;
 		private IMongoCollection<BsonDocument> _productCollection;
-		private IMongoCollection<BsonDocument> _documentCollection;
-
-		public bool IsConnected { get; private set; }
+		private IMongoCollection<BsonDocument> _productSeriesCollection;
+		private IMongoCollection<BsonDocument> _manufacturerCollection;
 
 
 		public void Connect()
 		{
 			try
 			{
-				MongoClient client = new MongoClient("mongodb+srv://admin:skelly@mongodbsynopsis-cluster.gzxog.mongodb.net/MongoDBSynopsis-Database?retryWrites=true&w=majority");
+				MongoClient client = new MongoClient("mongodb+srv://admin:admin@mongodbsynopsis-cluster.gzxog.mongodb.net/MongoDBSynopsis-Database?retryWrites=true&w=majority");
 				_database = client.GetDatabase("MongoDBSynopsis-Database");
-				_productCollection = _database.GetCollection<BsonDocument>("Manufacturer");
-				_productCollection = _database.GetCollection<BsonDocument>("Product");
-				_documentCollection = _database.GetCollection<BsonDocument>("ProductSeries");
-				IsConnected = true;
+				_manufacturerCollection = _database.GetCollection<BsonDocument>("Manufacturers");
 			}
 			catch (ArgumentOutOfRangeException e)
 			{
-				throw e;
+				throw;
 			}
-		}	
+		}
+
+		public BsonDocument Test()
+		{
+			Connect();
+			   var firstDocument = _manufacturerCollection.Find(new BsonDocument()).FirstOrDefault();
+			return firstDocument;
+		}
 	}
 }

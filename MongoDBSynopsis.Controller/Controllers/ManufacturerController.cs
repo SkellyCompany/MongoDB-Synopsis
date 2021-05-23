@@ -18,7 +18,7 @@ namespace MongoDBSynopsis.Controller.Controllers
             _manufacturerService = manufacturerService;
         }
 
-        // GET api/manufacturer
+        // GET manufacturer
         [HttpGet]
         public ActionResult<IEnumerable<Manufacturer>> Get()
         {
@@ -33,7 +33,7 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         }
 
-        // GET api/manufacturer/5
+        // GET manufacturer/5
         [HttpGet("{id}")]
         public ActionResult<Manufacturer> Get(int id)
         {
@@ -48,7 +48,7 @@ namespace MongoDBSynopsis.Controller.Controllers
         }
 
 
-        // POST api/manufacturer
+        // POST manufacturer
         [HttpPost]
         public ActionResult<Manufacturer> Post([FromBody] Manufacturer value)
         {
@@ -64,7 +64,7 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         }
 
-        // PUT api/manufacturer/5
+        // PUT manufacturer/5
         [HttpPut("{id}")]
         public ActionResult<Manufacturer> Put(int id, [FromBody] Manufacturer value)
         {
@@ -82,7 +82,7 @@ namespace MongoDBSynopsis.Controller.Controllers
             }
         }
 
-        // DELETE api/products/5
+        // DELETE manufacturer/5
         [HttpDelete("{id}")]
         public ActionResult<Product> Delete(int id)
         {

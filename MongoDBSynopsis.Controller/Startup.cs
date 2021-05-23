@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MongoDB.Driver;
 using MongoDBSynopsis.Core.ApplicationService;
 using MongoDBSynopsis.Core.ApplicationService.Services;
 using MongoDBSynopsis.Core.DomainService;
@@ -22,6 +23,9 @@ namespace MongoDBSynopsis.Controller
 						.WithOrigins("http://localhost:59462").AllowAnyHeader().AllowAnyMethod()
 					);
 			});
+
+			services.AddSingleton((s) => new MongoClient("mongodb+srv://admin:admin@mongodbsynopsis-cluster.gzxog.mongodb.net/MongoDBSynopsis-Database?retryWrites=true&w=majority"));
+
 			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<IProductSeriesService, ProductSeriesService>();
 			services.AddScoped<IManufacturerService, ManufacturerService>();

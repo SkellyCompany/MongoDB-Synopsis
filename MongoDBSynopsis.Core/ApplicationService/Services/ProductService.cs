@@ -1,34 +1,43 @@
-﻿using MongoDBSynopsis.Entities;
-using System;
+﻿using MongoDBSynopsis.Core.DomainService;
+using MongoDBSynopsis.Entities;
 using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Core.ApplicationService.Services
 {
 	public class ProductService : IProductService
 	{
-		public Product Create(Product product)
-		{
-			throw new NotImplementedException();
-		}
+		private readonly IProductRepository _productRepository;
 
-		public Product Delete(int id)
-		{
-			throw new NotImplementedException();
-		}
 
-		public Product Read(int id)
+		public ProductService(IProductRepository productRepository)
 		{
-			throw new NotImplementedException();
+			_productRepository = productRepository;
 		}
 
 		public IEnumerable<Product> ReadAll()
 		{
-			throw new NotImplementedException();
+			return _productRepository.ReadAll();
+		}
+
+		public Product Read(int id)
+		{
+			return _productRepository.Read(id);
+		}
+
+		public Product Create(Product product)
+		{
+			return _productRepository.Create(product);
 		}
 
 		public Product Update(Product product)
 		{
-			throw new NotImplementedException();
+			return _productRepository.Update(product);
 		}
+
+		public Product Delete(int id)
+		{
+			return _productRepository.Delete(id);
+		}
+
 	}
 }

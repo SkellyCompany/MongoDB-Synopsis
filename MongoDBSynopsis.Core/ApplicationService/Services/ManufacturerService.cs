@@ -1,34 +1,42 @@
-﻿using MongoDBSynopsis.Entities;
-using System;
+﻿using MongoDBSynopsis.Core.DomainService;
+using MongoDBSynopsis.Entities;
 using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Core.ApplicationService.Services
 {
 	public class ManufacturerService : IManufacturerService
 	{
-		public Manufacturer Create(Manufacturer manufacturer)
-		{
-			throw new NotImplementedException();
-		}
+		private readonly IManufacturerRepository _manufacturerRepository;
 
-		public Manufacturer Delete(int id)
-		{
-			throw new NotImplementedException();
-		}
 
-		public Manufacturer Read(int id)
+		public ManufacturerService(IManufacturerRepository manufacturerRepository)
 		{
-			throw new NotImplementedException();
+			_manufacturerRepository = manufacturerRepository;
 		}
 
 		public IEnumerable<Manufacturer> ReadAll()
 		{
-			throw new NotImplementedException();
+			return _manufacturerRepository.ReadAll();
+		}
+
+		public Manufacturer Read(int id)
+		{
+			return _manufacturerRepository.Read(id);
+		}
+
+		public Manufacturer Create(Manufacturer manufacturer)
+		{
+			return _manufacturerRepository.Create(manufacturer);
 		}
 
 		public Manufacturer Update(Manufacturer manufacturer)
 		{
-			throw new NotImplementedException();
+			return _manufacturerRepository.Update(manufacturer);
+		}
+
+		public Manufacturer Delete(int id)
+		{
+			return _manufacturerRepository.Delete(id);
 		}
 	}
 }

@@ -14,6 +14,7 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 
 		public Manufacturer Delete(int id)
 		{
+
 			throw new NotImplementedException();
 		}
 
@@ -24,6 +25,9 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 
 		public IEnumerable<Manufacturer> ReadAll()
 		{
+			Client client = new Client();
+			var t = client.Test();
+			var ta = client.Test();
 			throw new NotImplementedException();
 		}
 
