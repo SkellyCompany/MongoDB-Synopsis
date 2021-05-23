@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Infrastructure.Repositories
 {
-	class ProductRepository : IProductRepository
+	public class ProductRepository : IProductRepository
 	{
 		public Product Create(Product product)
 		{

@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using MongoDBSynopsis.Core.ApplicationService;
+using MongoDBSynopsis.Core.ApplicationService.Services;
+using MongoDBSynopsis.Core.DomainService;
+using MongoDBSynopsis.Infrastructure.Repositories;
 
 namespace MongoDBSynopsis.Controller
 {
@@ -16,6 +15,22 @@ namespace MongoDBSynopsis.Controller
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddCors(options =>
+			{
+				options.AddPolicy("AllowSpecificOrigin",
+					builder => builder
+						.WithOrigins("http://localhost:59462").AllowAnyHeader().AllowAnyMethod()
+					);
+			});
+			services.AddScoped<IProductService, ProductService>();
+			services.AddScoped<IProductSeriesService, ProductSeriesService>();
+			services.AddScoped<IManufacturerService, ManufacturerService>();
+
+			services.AddScoped<IProductRepository, ProductRepository>();
+			services.AddScoped<IProductSeriesRepository, ProductSeriesRepository>();
+			services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+
+			services.AddControllers();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,15 +40,13 @@ namespace MongoDBSynopsis.Controller
 			{
 				app.UseDeveloperExceptionPage();
 			}
+			app.UseCors("AllowSpecificOrigin");
 
 			app.UseRouting();
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapGet("/", async context =>
-				{
-					await context.Response.WriteAsync("Hello World!");
-				});
+				endpoints.MapControllers();
 			});
 		}
 	}

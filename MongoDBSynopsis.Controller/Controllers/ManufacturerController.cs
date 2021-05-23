@@ -6,7 +6,9 @@ using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Controller.Controllers
 {
-	public class ManufacturerController : ControllerBase
+    [Route("[controller]")]
+    [ApiController]
+    public class ManufacturerController : ControllerBase
 	{
         private readonly IManufacturerService _manufacturerService;
 

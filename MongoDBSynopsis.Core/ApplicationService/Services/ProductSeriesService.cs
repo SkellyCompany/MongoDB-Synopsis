@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Core.ApplicationService.Services
 {
-	class ProductSeriesService : IProductSeriesService
+	public class ProductSeriesService : IProductSeriesService
 	{
 		public ProductSeries Create(ProductSeries productSeries)
 		{

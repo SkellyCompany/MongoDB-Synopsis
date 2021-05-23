@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MongoDBSynopsis.Core\MongoDBSynopsis.Core.csproj" />
+    <ProjectReference Include="..\MongoDBSynopsis.Infrastructure\MongoDBSynopsis.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
