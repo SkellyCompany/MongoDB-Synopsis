@@ -7,12 +7,12 @@ namespace MongoDBSynopsis.Core.DomainService
 	{
 		ProductSeries Create(ProductSeries productSeries);
 
-		ProductSeries Read(int id);
+		ProductSeries Read(string id);
 
 		IEnumerable<ProductSeries> ReadAll();
 
 		ProductSeries Update(ProductSeries productSeries);
 
-		ProductSeries Delete(int id);
+		ProductSeries Delete(string id);
 	}
 }

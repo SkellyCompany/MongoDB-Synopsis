@@ -1,36 +1,63 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using System;
+using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Infrastructure
 {
-	class Client
+	public class Client
 	{
-		private IMongoDatabase _database;
-		private IMongoCollection<BsonDocument> _productCollection;
-		private IMongoCollection<BsonDocument> _productSeriesCollection;
-		private IMongoCollection<BsonDocument> _manufacturerCollection;
+		private readonly MongoClient _mongoClient;
 
 
-		public void Connect()
+		public Client(MongoClient mongoClient)
 		{
-			try
-			{
-				MongoClient client = new MongoClient("mongodb+srv://admin:admin@mongodbsynopsis-cluster.gzxog.mongodb.net/MongoDBSynopsis-Database?retryWrites=true&w=majority");
-				_database = client.GetDatabase("MongoDBSynopsis-Database");
-				_manufacturerCollection = _database.GetCollection<BsonDocument>("Manufacturers");
-			}
-			catch (ArgumentOutOfRangeException e)
-			{
-				throw;
-			}
+			_mongoClient = mongoClient;
 		}
 
-		public BsonDocument Test()
+		public void Create(string collectionName, BsonDocument bsonDocument)
 		{
-			Connect();
-			   var firstDocument = _manufacturerCollection.Find(new BsonDocument()).FirstOrDefault();
-			return firstDocument;
+			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
+			collection.InsertOne(bsonDocument);
+		}
+
+		public void Delete(string collectionName, string id)
+		{
+			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
+			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+			collection.DeleteOne(filter);
+		}
+
+		public T Read<T>(string collectionName, string id)
+		{
+			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
+			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+			BsonDocument document = collection.Find(filter).FirstOrDefault();
+			return BsonSerializer.Deserialize<T>(document);
+		}
+
+		public List<T> ReadAll<T>(string collectionName)
+		{
+			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
+			IEnumerable<BsonDocument> documents = collection.Find(new BsonDocument()).ToList();
+			List<T> objects = new List<T>();
+			foreach (BsonDocument item in documents)
+			{
+				objects.Add(BsonSerializer.Deserialize<T>(item));
+			}
+			return objects;
+		}
+
+		public void Update(string collectionName, string id, BsonDocument bsonDocument)
+		{
+			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
+			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+			collection.ReplaceOne(filter, bsonDocument);
 		}
 	}
 }

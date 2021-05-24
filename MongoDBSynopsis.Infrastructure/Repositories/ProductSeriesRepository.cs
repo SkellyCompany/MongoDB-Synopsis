@@ -1,35 +1,56 @@
-﻿using MongoDBSynopsis.Core.DomainService;
+﻿using MongoDB.Bson;
+using MongoDBSynopsis.Core.DomainService;
 using MongoDBSynopsis.Entities;
-using System;
 using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Infrastructure.Repositories
 {
 	public class ProductSeriesRepository : IProductSeriesRepository
 	{
+		private readonly Client _client;
+
+
+		public ProductSeriesRepository(Client client)
+		{
+			_client = client;
+		}
+
 		public ProductSeries Create(ProductSeries productSeries)
 		{
-			throw new NotImplementedException();
+			BsonDocument bsonDocument = new BsonDocument
+			{
+				{ "Name", productSeries.Name},
+				{ "Image", productSeries.Image}
+			};
+			_client.Create("ProductSeries", bsonDocument);
+			return productSeries;
 		}
 
-		public ProductSeries Delete(int id)
+		public ProductSeries Delete(string id)
 		{
-			throw new NotImplementedException();
+			_client.Delete("ProductSeries", id);
+			return null;
 		}
 
-		public ProductSeries Read(int id)
+		public ProductSeries Read(string id)
 		{
-			throw new NotImplementedException();
+			return _client.Read<ProductSeries>("ProductSeries", id);
 		}
 
 		public IEnumerable<ProductSeries> ReadAll()
 		{
-			throw new NotImplementedException();
+			return _client.ReadAll<ProductSeries>("ProductSeries");
 		}
 
 		public ProductSeries Update(ProductSeries productSeries)
 		{
-			throw new NotImplementedException();
+			BsonDocument bsonDocument = new BsonDocument
+			{
+				{ "Name", productSeries.Name},
+				{ "Image", productSeries.Image}
+			};
+			_client.Update("ProductSeries", productSeries.Id, bsonDocument);
+			return productSeries;
 		}
 	}
 }

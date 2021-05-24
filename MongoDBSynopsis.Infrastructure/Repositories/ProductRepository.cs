@@ -1,4 +1,5 @@
-﻿using MongoDBSynopsis.Core.DomainService;
+﻿using MongoDB.Bson;
+using MongoDBSynopsis.Core.DomainService;
 using MongoDBSynopsis.Entities;
 using System;
 using System.Collections.Generic;
@@ -7,29 +8,54 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 {
 	public class ProductRepository : IProductRepository
 	{
+		private readonly Client _client;
+
+
+		public ProductRepository(Client client)
+		{
+			_client = client;
+		}
+
 		public Product Create(Product product)
 		{
-			throw new NotImplementedException();
+			BsonDocument bsonDocument = new BsonDocument
+			{
+				{ "SerialNumber", product.SerialNumber},
+				{ "ConditionStatus", product.ConditionStatus},
+				{ "ConditionStatus", product.RegistrationDate},
+				{ "ConditionStatus", product.WarrantyDuration}
+			};
+			_client.Create("Products", bsonDocument);
+			return product;
 		}
 
-		public Product Delete(int id)
+		public Product Delete(string id)
 		{
-			throw new NotImplementedException();
+			_client.Delete("Products", id);
+			return null;
 		}
 
-		public Product Read(int id)
+		public Product Read(string id)
 		{
-			throw new NotImplementedException();
+			return _client.Read<Product>("Products", id);
 		}
 
 		public IEnumerable<Product> ReadAll()
 		{
-			throw new NotImplementedException();
+			return _client.ReadAll<Product>("Products");
 		}
 
 		public Product Update(Product product)
 		{
-			throw new NotImplementedException();
+			BsonDocument bsonDocument = new BsonDocument
+			{
+				{ "SerialNumber", product.SerialNumber},
+				{ "ConditionStatus", product.ConditionStatus},
+				{ "ConditionStatus", product.RegistrationDate},
+				{ "ConditionStatus", product.WarrantyDuration}
+			};
+			_client.Update("Products", product.Id, bsonDocument);
+			return product;
 		}
 	}
 }

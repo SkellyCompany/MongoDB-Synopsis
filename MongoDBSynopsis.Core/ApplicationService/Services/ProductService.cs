@@ -19,7 +19,7 @@ namespace MongoDBSynopsis.Core.ApplicationService.Services
 			return _productRepository.ReadAll();
 		}
 
-		public Product Read(int id)
+		public Product Read(string id)
 		{
 			return _productRepository.Read(id);
 		}
@@ -34,7 +34,7 @@ namespace MongoDBSynopsis.Core.ApplicationService.Services
 			return _productRepository.Update(product);
 		}
 
-		public Product Delete(int id)
+		public Product Delete(string id)
 		{
 			return _productRepository.Delete(id);
 		}

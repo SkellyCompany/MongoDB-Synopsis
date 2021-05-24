@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using MongoDBSynopsis.Core.ApplicationService;
 using MongoDBSynopsis.Core.ApplicationService.Services;
 using MongoDBSynopsis.Core.DomainService;
+using MongoDBSynopsis.Infrastructure;
 using MongoDBSynopsis.Infrastructure.Repositories;
 
 namespace MongoDBSynopsis.Controller
@@ -24,7 +25,7 @@ namespace MongoDBSynopsis.Controller
 					);
 			});
 
-			services.AddSingleton((s) => new MongoClient("mongodb+srv://admin:admin@mongodbsynopsis-cluster.gzxog.mongodb.net/MongoDBSynopsis-Database?retryWrites=true&w=majority"));
+			services.AddSingleton((s) => new Client(new MongoClient("mongodb+srv://admin:admin@mongodbsynopsis-cluster.gzxog.mongodb.net/MongoDBSynopsis-Database?retryWrites=true&w=majority")));
 
 			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<IProductSeriesService, ProductSeriesService>();
