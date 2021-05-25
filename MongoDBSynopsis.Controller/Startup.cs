@@ -25,7 +25,8 @@ namespace MongoDBSynopsis.Controller
 					);
 			});
 
-			services.AddSingleton((s) => new Client(new MongoClient("mongodb+srv://admin:admin@mongodbsynopsis-cluster.gzxog.mongodb.net/MongoDBSynopsis-Database?retryWrites=true&w=majority")));
+			services.AddSingleton((s) =>
+			new Client(new MongoClient("mongodb+srv://<user>:<pw>@mongodbsynopsis-cluster.gzxog.mongodb.net/MongoDBSynopsis-Database?retryWrites=true&w=majority")));
 
 			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<IProductSeriesService, ProductSeriesService>();
