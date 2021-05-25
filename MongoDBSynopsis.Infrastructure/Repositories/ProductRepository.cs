@@ -1,7 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDBSynopsis.Core.DomainService;
 using MongoDBSynopsis.Entities;
-using System;
 using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Infrastructure.Repositories
