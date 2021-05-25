@@ -35,7 +35,7 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         // GET productSeries/5
         [HttpGet("{id}")]
-        public ActionResult<ProductSeries> Get(int id)
+        public ActionResult<ProductSeries> Get(string id)
         {
             try
             {
@@ -60,8 +60,6 @@ namespace MongoDBSynopsis.Controller.Controllers
             {
                 return BadRequest(e.Message);
             }
-
-
         }
 
         // PUT productSeries/5
@@ -70,11 +68,12 @@ namespace MongoDBSynopsis.Controller.Controllers
         {
             try
             {
-                if (id != value.Id)
+                bool success = _productSeriesService.Update(value);
+                if (!success)
                 {
-                    return Conflict("Parameter ID does not match ProductSeries id");
+                    return NotFound($"Could not update ProductSeries with ID: {value.Id}");
                 }
-                return Ok(_productSeriesService.Update(value));
+                return Ok($"Updated Product with ID: {value.Id}");
             }
             catch (Exception e)
             {
@@ -84,14 +83,21 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         // DELETE productSeries/5
         [HttpDelete("{id}")]
-        public ActionResult<ProductSeries> Delete(int id)
+        public ActionResult<ProductSeries> Delete(string id)
         {
-            ProductSeries deletedProductSeries = _productSeriesService.Delete(id);
-            if (deletedProductSeries == null)
+            try
             {
-                return NotFound($"Did not find ProductSeries with ID: {id}");
+                bool success = _productSeriesService.Delete(id);
+                if (!success)
+                {
+                    return NotFound($"Did not find ProductSeries with ID: {id}");
+                }
+                return Ok($"Deleted ProductSeries with ID: {id}");
             }
-            return Ok(deletedProductSeries);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

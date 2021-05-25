@@ -67,7 +67,12 @@ namespace MongoDBSynopsis.Controller.Controllers
         {
             try
             {
-                return Ok(_manufacturerService.Update(value));
+                bool success = _manufacturerService.Update(value);
+                if (!success)
+                {
+                    return NotFound($"Could not update Manufacturer with ID: {value.Id}");
+                }
+                return Ok($"Updated Manufacturer with ID: {value.Id}");
             }
             catch (Exception e)
             {
@@ -79,12 +84,20 @@ namespace MongoDBSynopsis.Controller.Controllers
         [HttpDelete("{id}")]
         public ActionResult<Product> Delete(string id)
         {
-            Manufacturer deletedManufacturer = _manufacturerService.Delete(id);
-            if (deletedManufacturer == null)
-            {
-                return NotFound($"Did not find Manufacturer with ID: {id}");
+			try
+			{
+                bool success = _manufacturerService.Delete(id);
+                if (!success)
+                {
+                    return NotFound($"Did not find Manufacturer with ID: {id}");
+                }
+                return Ok($"Deleted Manufacturer with ID: {id}");
             }
-            return Ok(deletedManufacturer);
+			catch (Exception)
+			{
+
+				throw;
+			}
         }
     }
 }

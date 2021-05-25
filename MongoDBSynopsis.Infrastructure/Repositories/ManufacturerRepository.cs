@@ -26,10 +26,10 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 			return manufacturer;
 		}
 
-		public Manufacturer Delete(string id)
+		public bool Delete(string id)
 		{
-			_client.Delete("Manufacturers", id);
-			return null;
+			bool success = _client.Delete("Manufacturers", id);
+			return success;
 		}
 
 		public Manufacturer Read(string id)
@@ -42,15 +42,15 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 			return _client.ReadAll<Manufacturer>("Manufacturers");
 		}
 
-		public Manufacturer Update(Manufacturer manufacturer)
+		public bool Update(Manufacturer manufacturer)
 		{
 			BsonDocument bsonDocument = new BsonDocument
 			{
 				{ "Name", manufacturer.Name},
 				{ "Image", manufacturer.Image}
 			};
-			_client.Update("Manufacturers", manufacturer.Id, bsonDocument);
-			return manufacturer;
+			bool result = _client.Update("Manufacturers", manufacturer.Id, bsonDocument);
+			return result;
 		}
 	}
 }

@@ -26,10 +26,10 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 			return productSeries;
 		}
 
-		public ProductSeries Delete(string id)
+		public bool Delete(string id)
 		{
-			_client.Delete("ProductSeries", id);
-			return null;
+			bool success = _client.Delete("ProductSeries", id);
+			return success;
 		}
 
 		public ProductSeries Read(string id)
@@ -42,15 +42,15 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 			return _client.ReadAll<ProductSeries>("ProductSeries");
 		}
 
-		public ProductSeries Update(ProductSeries productSeries)
+		public bool Update(ProductSeries productSeries)
 		{
 			BsonDocument bsonDocument = new BsonDocument
 			{
 				{ "Name", productSeries.Name},
 				{ "Image", productSeries.Image}
 			};
-			_client.Update("ProductSeries", productSeries.Id, bsonDocument);
-			return productSeries;
+			bool success = _client.Update("ProductSeries", productSeries.Id, bsonDocument);
+			return success;
 		}
 	}
 }

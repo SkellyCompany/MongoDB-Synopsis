@@ -28,10 +28,10 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 			return product;
 		}
 
-		public Product Delete(string id)
+		public bool Delete(string id)
 		{
-			_client.Delete("Products", id);
-			return null;
+			bool success = _client.Delete("Products", id);
+			return success;
 		}
 
 		public Product Read(string id)
@@ -44,7 +44,7 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 			return _client.ReadAll<Product>("Products");
 		}
 
-		public Product Update(Product product)
+		public bool Update(Product product)
 		{
 			BsonDocument bsonDocument = new BsonDocument
 			{
@@ -53,8 +53,8 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 				{ "ConditionStatus", product.RegistrationDate},
 				{ "ConditionStatus", product.WarrantyDuration}
 			};
-			_client.Update("Products", product.Id, bsonDocument);
-			return product;
+			bool success = _client.Update("Products", product.Id, bsonDocument);
+			return success;
 		}
 	}
 }

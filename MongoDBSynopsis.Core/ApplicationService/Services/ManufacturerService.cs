@@ -29,12 +29,12 @@ namespace MongoDBSynopsis.Core.ApplicationService.Services
 			return _manufacturerRepository.Create(manufacturer);
 		}
 
-		public Manufacturer Update(Manufacturer manufacturer)
+		public bool Update(Manufacturer manufacturer)
 		{
 			return _manufacturerRepository.Update(manufacturer);
 		}
 
-		public Manufacturer Delete(string id)
+		public bool Delete(string id)
 		{
 			return _manufacturerRepository.Delete(id);
 		}

@@ -11,8 +11,8 @@ namespace MongoDBSynopsis.Core.DomainService
 
 		IEnumerable<ProductSeries> ReadAll();
 
-		ProductSeries Update(ProductSeries productSeries);
+		bool Update(ProductSeries productSeries);
 
-		ProductSeries Delete(string id);
+		bool Delete(string id);
 	}
 }

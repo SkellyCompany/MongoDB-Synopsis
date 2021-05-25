@@ -11,8 +11,8 @@ namespace MongoDBSynopsis.Core.DomainService
 
 		IEnumerable<Manufacturer> ReadAll();
 
-		Manufacturer Update(Manufacturer manufacturer);
+		bool Update(Manufacturer manufacturer);
 
-		Manufacturer Delete(string id);
+		bool Delete(string id);
 	}
 }

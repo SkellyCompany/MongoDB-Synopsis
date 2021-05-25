@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Infrastructure
@@ -22,12 +23,20 @@ namespace MongoDBSynopsis.Infrastructure
 			collection.InsertOne(bsonDocument);
 		}
 
-		public void Delete(string collectionName, string id)
+		public bool Delete(string collectionName, string id)
 		{
 			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
 			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
 			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-			collection.DeleteOne(filter);
+			DeleteResult result = collection.DeleteOne(filter);
+			if (result.DeletedCount > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		public T Read<T>(string collectionName, string id)
@@ -52,12 +61,20 @@ namespace MongoDBSynopsis.Infrastructure
 			return objects;
 		}
 
-		public void Update(string collectionName, string id, BsonDocument bsonDocument)
+		public bool Update(string collectionName, string id, BsonDocument bsonDocument)
 		{
 			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
 			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
 			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-			collection.ReplaceOne(filter, bsonDocument);
+			ReplaceOneResult result = collection.ReplaceOne(filter, bsonDocument);
+			if (result.ModifiedCount > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 }

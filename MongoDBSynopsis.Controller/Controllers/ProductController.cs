@@ -35,7 +35,7 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         // GET product/5
         [HttpGet("{id}")]
-        public ActionResult<Product> Get(int id)
+        public ActionResult<Product> Get(string id)
         {
             try
             {
@@ -70,11 +70,12 @@ namespace MongoDBSynopsis.Controller.Controllers
         {
             try
             {
-                if (id != value.Id)
+                bool success = _productService.Update(value);
+                if (!success)
                 {
-                    return Conflict("Parameter ID does not match Product id");
+                    return NotFound($"Could not update Product with ID: {value.Id}");
                 }
-                return Ok(_productService.Update(value));
+                return Ok($"Updated Product with ID: {value.Id}");
             }
             catch (Exception e)
             {
@@ -84,14 +85,21 @@ namespace MongoDBSynopsis.Controller.Controllers
 
         // DELETE product/5
         [HttpDelete("{id}")]
-        public ActionResult<Product> Delete(int id)
+        public ActionResult<Product> Delete(string id)
         {
-            Product deletedProduct = _productService.Delete(id);
-            if (deletedProduct == null)
-            {
-                return NotFound($"Did not find Product with ID: {id}");
+			try
+			{
+                bool success = _productService.Delete(id);
+                if (!success)
+                {
+                    return NotFound($"Did not find Product with ID: {id}");
+                }
+                return Ok($"Deleted Product with ID: {id}");
             }
-            return Ok(deletedProduct);
+			catch (Exception e)
+			{
+				return BadRequest(e.Message);
+			}
         }
     }
 }

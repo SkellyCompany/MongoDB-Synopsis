@@ -29,12 +29,12 @@ namespace MongoDBSynopsis.Core.ApplicationService.Services
 			return _productSeriesRepository.Create(productSeries);
 		}
 
-		public ProductSeries Update(ProductSeries productSeries)
+		public bool Update(ProductSeries productSeries)
 		{
 			return _productSeriesRepository.Update(productSeries);
 		}
 
-		public ProductSeries Delete(string id)
+		public bool Delete(string id)
 		{
 			return _productSeriesRepository.Delete(id);
 		}
