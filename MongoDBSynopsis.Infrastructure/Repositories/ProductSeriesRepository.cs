@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDBSynopsis.Core.DomainService;
 using MongoDBSynopsis.Entities;
 using System.Collections.Generic;
@@ -15,10 +16,54 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 			_client = client;
 		}
 
+		public IEnumerable<ProductSeries> ReadAll()
+		{
+			IEnumerable<BsonDocument> documents = _client.ReadAll<ProductSeries>("ProductSeries");
+			List<ProductSeries> objects = new();
+			foreach (BsonDocument document in documents)
+			{
+				ProductSeries productSeries = new()
+				{
+					Name = document.GetValue("Name").AsString,
+					Image = document.GetValue("Image").AsString
+				};
+				objects.Add(productSeries);
+			}
+			return objects;
+		}
+
+		public ProductSeries Read(string id)
+		{
+			BsonDocument document = _client.Read<ProductSeries>("ProductSeries", id);
+			ProductSeries productSeries = new()
+			{
+				Id = id,
+				Name = document.GetValue("Name").AsString,
+				Image = document.GetValue("Image").AsString
+			};
+			return productSeries;
+		}
+
+		public IEnumerable<ProductSeries> ReadAllByManufacturer(string manufacturerId)
+		{
+			IEnumerable<BsonDocument> documents = _client.ReadAll<ProductSeries>("ProductSeries", "ManufacturerId", manufacturerId);
+			List<ProductSeries> objects = new();
+			foreach (BsonDocument document in documents)
+			{
+				ProductSeries productSeries = new()
+				{
+					Name = document.GetValue("Name").AsString,
+					Image = document.GetValue("Image").AsString
+				};
+				objects.Add(productSeries);
+			}
+			return objects;
+		}
+
 		public ProductSeries Create(ProductSeries productSeries)
 		{
-			BsonArray productsBsonArray = new BsonArray();
-			BsonDocument bsonDocument = new BsonDocument
+			BsonArray productsBsonArray = new();
+			BsonDocument bsonDocument = new()
 			{
 				{ "ManufacturerId", productSeries.Manufacturer.Id},
 				{ "Products", productsBsonArray},
@@ -29,26 +74,10 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 			return productSeries;
 		}
 
-		public bool Delete(string id)
-		{
-			bool success = _client.Delete("ProductSeries", id);
-			return success;
-		}
-
-		public ProductSeries Read(string id)
-		{
-			return _client.Read<ProductSeries>("ProductSeries", id);
-		}
-
-		public IEnumerable<ProductSeries> ReadAll()
-		{
-			return _client.ReadAll<ProductSeries>("ProductSeries");
-		}
-
 		public bool Update(ProductSeries productSeries)
 		{
-			BsonArray productsBsonArray = new BsonArray();
-			BsonDocument bsonDocument = new BsonDocument
+			BsonArray productsBsonArray = new();
+			BsonDocument bsonDocument = new()
 			{
 				{ "ManufacturerId", productSeries.Manufacturer.Id},
 				{ "Products", productsBsonArray},
@@ -56,6 +85,12 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 				{ "Image", productSeries.Image}
 			};
 			bool success = _client.Update("ProductSeries", productSeries.Id, bsonDocument);
+			return success;
+		}
+
+		public bool Delete(string id)
+		{
+			bool success = _client.Delete("ProductSeries", id);
 			return success;
 		}
 	}

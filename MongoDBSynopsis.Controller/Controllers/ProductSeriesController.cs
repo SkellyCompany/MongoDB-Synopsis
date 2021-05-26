@@ -47,6 +47,19 @@ namespace MongoDBSynopsis.Controller.Controllers
             }
         }
 
+        // GET productSeries/5
+        [HttpGet("manufacturerId/{id}")]
+        public ActionResult<IEnumerable<ProductSeries>> GetByManufacturer(string id)
+        {
+            try
+            {
+                return Ok(_productSeriesService.ReadAllByManufacturer(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         // POST productSeries
         [HttpPost]

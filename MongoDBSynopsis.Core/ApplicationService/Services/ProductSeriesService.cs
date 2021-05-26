@@ -19,6 +19,11 @@ namespace MongoDBSynopsis.Core.ApplicationService.Services
 			return _productSeriesRepository.ReadAll();
 		}
 
+		public IEnumerable<ProductSeries> ReadAllByManufacturer(string manufacturerId)
+		{
+			return _productSeriesRepository.ReadAllByManufacturer(manufacturerId);
+		}
+
 		public ProductSeries Read(string id)
 		{
 			return _productSeriesRepository.Read(id);

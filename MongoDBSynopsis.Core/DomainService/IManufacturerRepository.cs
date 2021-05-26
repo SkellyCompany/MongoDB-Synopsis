@@ -7,9 +7,11 @@ namespace MongoDBSynopsis.Core.DomainService
 	{
 		Manufacturer Create(Manufacturer manufacturer);
 
+		IEnumerable<Manufacturer> ReadAll();
+
+
 		Manufacturer Read(string id);
 
-		IEnumerable<Manufacturer> ReadAll();
 
 		bool Update(Manufacturer manufacturer);
 

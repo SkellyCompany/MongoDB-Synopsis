@@ -11,6 +11,8 @@ namespace MongoDBSynopsis.Core.ApplicationService
 
 		IEnumerable<ProductSeries> ReadAll();
 
+		IEnumerable<ProductSeries> ReadAllByManufacturer(string manufacturerId);
+
 		bool Update(ProductSeries productSeries);
 
 		bool Delete(string id);

@@ -1,7 +1,5 @@
 ﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
 
 namespace MongoDBSynopsis.Infrastructure
@@ -16,6 +14,32 @@ namespace MongoDBSynopsis.Infrastructure
 			_mongoClient = mongoClient;
 		}
 
+		public IEnumerable<BsonDocument> ReadAll<T>(string collectionName, string filterField = "", string filterValue = "")
+		{
+			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
+			if (!string.IsNullOrEmpty(filterField) && !string.IsNullOrEmpty(filterValue))
+			{
+				FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq(filterField, filterValue);
+				IEnumerable<BsonDocument> documents = collection.Find(filter).ToList();
+				return documents;
+			}
+			else
+			{
+				IEnumerable<BsonDocument> documents = collection.Find(new BsonDocument()).ToList();
+				return documents;
+			}
+		}
+
+		public BsonDocument Read<T>(string collectionName, string id)
+		{
+			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
+			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+			BsonDocument document = collection.Find(filter).FirstOrDefault();
+			return document;
+		}
+
 		public void Create(string collectionName, BsonDocument bsonDocument)
 		{
 			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
@@ -23,42 +47,13 @@ namespace MongoDBSynopsis.Infrastructure
 			collection.InsertOne(bsonDocument);
 		}
 
-		public bool Delete(string collectionName, string id)
+		public void CreateSubcollection(string collectionName, string subCollectionName, string id, BsonDocument bsonDocument)
 		{
 			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
 			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
-			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-			DeleteResult result = collection.DeleteOne(filter);
-			if (result.DeletedCount > 0)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		public T Read<T>(string collectionName, string id)
-		{
-			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
-			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
-			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
-			BsonDocument document = collection.Find(filter).FirstOrDefault();
-			return BsonSerializer.Deserialize<T>(document);
-		}
-
-		public List<T> ReadAll<T>(string collectionName)
-		{
-			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
-			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
-			IEnumerable<BsonDocument> documents = collection.Find(new BsonDocument()).ToList();
-			List<T> objects = new List<T>();
-			foreach (BsonDocument item in documents)
-			{
-				objects.Add(BsonSerializer.Deserialize<T>(item));
-			}
-			return objects;
+			var filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+			var update = Builders<BsonDocument>.Update.Push(subCollectionName, bsonDocument);
+			collection.FindOneAndUpdate(filter, update);
 		}
 
 		public bool Update(string collectionName, string id, BsonDocument bsonDocument)
@@ -68,6 +63,22 @@ namespace MongoDBSynopsis.Infrastructure
 			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
 			ReplaceOneResult result = collection.ReplaceOne(filter, bsonDocument);
 			if (result.ModifiedCount > 0)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public bool Delete(string collectionName, string id)
+		{
+			IMongoDatabase database = _mongoClient.GetDatabase("MongoDBSynopsis-Database");
+			IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
+			FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("_id", ObjectId.Parse(id));
+			DeleteResult result = collection.DeleteOne(filter);
+			if (result.DeletedCount > 0)
 			{
 				return true;
 			}
