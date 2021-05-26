@@ -17,8 +17,11 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 
 		public ProductSeries Create(ProductSeries productSeries)
 		{
+			BsonArray productsBsonArray = new BsonArray();
 			BsonDocument bsonDocument = new BsonDocument
 			{
+				{ "ManufacturerId", productSeries.Manufacturer.Id},
+				{ "Products", productsBsonArray},
 				{ "Name", productSeries.Name},
 				{ "Image", productSeries.Image}
 			};
@@ -44,8 +47,11 @@ namespace MongoDBSynopsis.Infrastructure.Repositories
 
 		public bool Update(ProductSeries productSeries)
 		{
+			BsonArray productsBsonArray = new BsonArray();
 			BsonDocument bsonDocument = new BsonDocument
 			{
+				{ "ManufacturerId", productSeries.Manufacturer.Id},
+				{ "Products", productsBsonArray},
 				{ "Name", productSeries.Name},
 				{ "Image", productSeries.Image}
 			};

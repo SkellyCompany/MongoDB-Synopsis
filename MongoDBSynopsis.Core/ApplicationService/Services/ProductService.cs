@@ -38,6 +38,5 @@ namespace MongoDBSynopsis.Core.ApplicationService.Services
 		{
 			return _productRepository.Delete(id);
 		}
-
 	}
 }
